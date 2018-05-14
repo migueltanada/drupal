@@ -1,0 +1,36 @@
+version: '3'
+volumes:
+    mysql_data:
+    drupal_data:
+
+services:
+  mysql:
+    image: mysql:5.6.25
+    ports:
+      - 3306:3306
+    volumes:
+      - mysql_data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: "test"
+      MYSQL_DATABASE: "drupal"
+      MYSQL_USER: "testuser"
+      MYSQL_PASSWORD: "testpassword"
+
+  myadmin:
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - 9081:80
+    environment:
+      MYSQL_ROOT_PASSWORD: "test"
+      MYSQL_USER: "testuser"
+      MYSQL_PASSWORD: "testpassword"
+      PMA_HOST: mysql
+      PMA_PORT: "3306"
+
+  drupal:
+    image: drupal:8.5.3-apache
+    ports:
+      - 9080:80
+    volumes: 
+      - drupal_data:/var/www/html/
+    
